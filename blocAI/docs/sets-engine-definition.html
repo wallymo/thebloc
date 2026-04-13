@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SETS Engine: Definition & Specification</title>
+  <style>
+    :root {
+      --black: #0E0E0E;
+      --off-white: #F5F4F0;
+      --mid: #E8E6DF;
+      --accent: #C84B31;
+      --accent-light: #F2E8E5;
+      --muted: #7A7670;
+      --border: #D6D3CB;
+      --green: #2C5F2D;
+      --green-light: #EAF2EA;
+      --amber: #B8860B;
+      --amber-light: #FDF6E3;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--off-white);
+      color: var(--black);
+      font-family: 'Georgia', serif;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--black);
+      color: white;
+      padding: 64px 80px 56px;
+    }
+
+    header .eyebrow {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 52px;
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    header h1 span {
+      color: var(--accent);
+    }
+
+    header .subtitle {
+      font-family: 'Arial', sans-serif;
+      font-size: 15px;
+      color: #A09D97;
+      max-width: 560px;
+      line-height: 1.6;
+    }
+
+    header .meta {
+      margin-top: 40px;
+      display: flex;
+      gap: 40px;
+      font-family: 'Arial', sans-serif;
+      font-size: 12px;
+      color: #666;
+      letter-spacing: 0.06em;
+      border-top: 1px solid #222;
+      padding-top: 28px;
+    }
+
+    header .meta strong {
+      display: block;
+      color: #999;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 4px;
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 0 80px;
+    }
+
+    section {
+      padding: 72px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section:last-child {
+      border-bottom: none;
+    }
+
+    .section-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+    }
+
+    h2 {
+      font-size: 32px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 24px;
+    }
+
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      font-family: 'Arial', sans-serif;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: #2A2A2A;
+      margin-bottom: 16px;
+      max-width: 720px;
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    /* ── WHAT IS SETS ── */
+    .what-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-top: 40px;
+    }
+
+    .what-card {
+      background: white;
+      padding: 36px;
+    }
+
+    .what-card .number {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .what-card h4 {
+      font-size: 17px;
+      font-weight: 700;
+      font-family: 'Arial', sans-serif;
+      margin-bottom: 10px;
+    }
+
+    .what-card p {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: none;
+      margin: 0;
+    }
+
+    /* ── AGENTS ── */
+    .agents-list {
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .agent {
+      background: white;
+      display: grid;
+      grid-template-columns: 220px 1fr 200px;
+      gap: 0;
+    }
+
+    .agent-index {
+      background: var(--black);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 32px 28px;
+    }
+
+    .agent-index .num {
+      font-family: 'Arial', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    .agent-index .name {
+      font-family: 'Arial', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: white;
+      line-height: 1.3;
+    }
+
+    .agent-body {
+      padding: 32px 36px;
+      border-right: 1px solid var(--border);
+    }
+
+    .agent-body h4 {
+      font-family: 'Arial', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .agent-body p {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: none;
+      margin-bottom: 16px;
+    }
+
+    .agent-body .criteria {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .agent-body .criteria span {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      background: var(--mid);
+      color: var(--black);
+      padding: 4px 10px;
+      border-radius: 2px;
+      letter-spacing: 0.04em;
+    }
+
+    .agent-meta {
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .agent-meta .meta-item strong {
+      display: block;
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .agent-meta .meta-item span {
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      color: var(--black);
+    }
+
+    .blocker-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+    }
+
+    /* ── SCORING ── */
+    .score-categories {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      margin: 40px 0;
+    }
+
+    .score-cat {
+      background: white;
+      padding: 28px 24px;
+      text-align: center;
+    }
+
+    .score-cat .range {
+      font-family: 'Arial', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .score-cat .label {
+      font-family: 'Arial', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .score-cat .desc {
+      font-family: 'Arial', sans-serif;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .poor .range, .poor .label { color: #C0392B; }
+    .adequate .range, .adequate .label { color: #E67E22; }
+    .good .range, .good .label { color: #27AE60; }
+    .strong .range, .strong .label { color: var(--green); }
+
+    /* ── WEIGHTS TABLE ── */
+    .weight-note {
+      background: var(--amber-light);
+      border-left: 3px solid var(--amber);
+      padding: 16px 20px;
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      color: #5a4a00;
+      margin: 28px 0;
+      max-width: 720px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 32px;
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+    }
+
+    thead tr {
+      background: var(--black);
+      color: white;
+    }
+
+    thead th {
+      padding: 14px 20px;
+      text-align: left;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    tbody tr {
+      background: white;
+      border-bottom: 2px solid var(--off-white);
+    }
+
+    tbody tr:hover {
+      background: #FAFAF8;
+    }
+
+    tbody td {
+      padding: 16px 20px;
+      vertical-align: middle;
+    }
+
+    tbody td:first-child {
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    .pct {
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    .pct-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pct-bar {
+      height: 6px;
+      background: var(--accent);
+      border-radius: 2px;
+      min-width: 4px;
+    }
+
+    .floor-row td {
+      background: var(--off-white);
+      font-style: italic;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* ── RULES ── */
+    .rules-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-top: 40px;
+    }
+
+    .rule-card {
+      background: white;
+      padding: 28px 32px;
+      border-left: 4px solid var(--accent);
+    }
+
+    .rule-card h4 {
+      font-family: 'Arial', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .rule-card p {
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      color: var(--muted);
+      max-width: none;
+      margin: 0;
+    }
+
+    /* ── INPUTS ── */
+    .inputs-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 40px;
+    }
+
+    .input-card {
+      background: white;
+      padding: 32px;
+    }
+
+    .input-card .icon {
+      font-size: 24px;
+      margin-bottom: 14px;
+    }
+
+    .input-card h4 {
+      font-family: 'Arial', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .input-card p {
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      color: var(--muted);
+      max-width: none;
+      margin: 0;
+    }
+
+    /* ── OUTPUTS ── */
+    .outputs-list {
+      margin-top: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .output-row {
+      background: white;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 0;
+    }
+
+    .output-label {
+      padding: 22px 28px;
+      border-right: 1px solid var(--border);
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+    }
+
+    .output-desc {
+      padding: 22px 28px;
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+    }
+
+    /* ── VALIDATION ── */
+    .validation-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2px;
+      margin-top: 40px;
+    }
+
+    .val-card {
+      background: white;
+      padding: 28px 24px;
+    }
+
+    .val-card .val-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .val-card .val-q {
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .val-card .val-tests {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      color: #555;
+      padding: 40px 80px;
+      font-family: 'Arial', sans-serif;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer .logo {
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 900px) {
+      header, .container, footer { padding-left: 28px; padding-right: 28px; }
+      header h1 { font-size: 36px; }
+      .what-grid, .rules-grid, .inputs-row { grid-template-columns: 1fr; }
+      .agent { grid-template-columns: 1fr; }
+      .score-categories { grid-template-columns: 1fr 1fr; }
+      .validation-grid { grid-template-columns: 1fr 1fr; }
+      table { font-size: 12px; }
+      .output-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header>
+  <div class="eyebrow">Hedgehox · Confidential</div>
+  <h1>SETS Engine<br><span>Our Interpretation</span></h1>
+  <p class="subtitle">Hedgehox's read of the current in-development tool.</p>
+  <div class="meta">
+    <div><strong>Prepared by</strong>Hedgehox</div>
+    <div><strong>For</strong>The Bloc</div>
+    <div><strong>Date</strong>April 2026</div>
+    <div><strong>Status</strong>Proposed Definition</div>
+  </div>
+</header>
+
+<!-- ══════════════ WHAT IS SETS ══════════════ -->
+<div class="container">
+  <section>
+    <div class="section-label">How we got here</div>
+    <h2>Starting from what it needs to prove</h2>
+    <p>The Bloc's documentation on the SETS Engine is mostly a validation plan, a test matrix of what the tool needs to demonstrate before it can be trusted. That plan doesn't describe the engine. It describes what happens when the engine fails.</p>
+    <p>We worked backwards from those tests. A tool that needs to "correctly respond when a single element is modified" has to understand what that element does in the asset. A tool that needs to "align with human expert judgment" has to evaluate along dimensions experts would actually use. A tool that needs to "apply rules consistently" needs explicit, deterministic logic. Not AI inference that varies run to run.</p>
+    <p>What follows is our read of what the engine has to be in order to pass its own tests: six scoring dimensions, weights that shift by context, a set of hard rules, and a clear output format. This is a proposed definition, not a description of what's been built. Use it to get the team aligned before validation starts.</p>
+  </section>
+
+  <!-- ══════════════ THE 6 AGENTS ══════════════ -->
+  <section>
+    <div class="section-label">Architecture</div>
+    <h2>The 6 scoring agents</h2>
+    <p>Each agent has its own domain, scoring criteria, and evidence requirements. All six run at the same time; a validation layer then checks for contradictions between them before anything is surfaced.</p>
+
+    <div class="agents-list">
+
+      <!-- Agent 1 -->
+      <div class="agent">
+        <div class="agent-index">
+          <div class="num">01</div>
+          <div class="name">Regulatory &amp; Compliance</div>
+        </div>
+        <div class="agent-body">
+          <h4>FDA and regulatory requirements</h4>
+          <p>Checks the structural and legal requirements: ISI presence and completeness, fair balance, required safety disclosures, compliant claims language. Failures here are not stylistic. They are legal. This is the only dimension where a bad score can stop an asset regardless of everything else.</p>
+          <div class="criteria">
+            <span>ISI presence</span>
+            <span>Fair balance</span>
+            <span>Safety disclosures</span>
+            <span>Claims language</span>
+            <span>Required disclaimers</span>
+          </div>
+        </div>
+        <div class="agent-meta">
+          <div class="meta-item">
+            <strong>Hard blocker?</strong>
+            <span><span class="blocker-badge">Yes</span></span>
+          </div>
+          <div class="meta-item">
+            <strong>Blocker threshold</strong>
+            <span>Score &lt; 40 flags overall result regardless of other dimensions</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agent 2 -->
+      <div class="agent">
+        <div class="agent-index">
+          <div class="num">02</div>
+          <div class="name">Scientific Accuracy</div>
+        </div>
+        <div class="agent-body">
+          <h4>Clinical and medical content integrity</h4>
+          <p>Separate from regulatory: this one asks whether the claims are actually true. Substantiated efficacy language, correct statistics, no off-label implications, data presented in context. An asset can clear every compliance checkbox and still mislead. This is what catches that.</p>
+          <div class="criteria">
+            <span>Claims substantiation</span>
+            <span>Efficacy language</span>
+            <span>Statistical accuracy</span>
+            <span>Off-label risk</span>
+            <span>Data context</span>
+          </div>
+        </div>
+        <div class="agent-meta">
+          <div class="meta-item">
+            <strong>Hard blocker?</strong>
+            <span><span class="blocker-badge">Yes</span></span>
+          </div>
+          <div class="meta-item">
+            <strong>Blocker threshold</strong>
+            <span>Score &lt; 40 flags overall result regardless of other dimensions</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agent 3 -->
+      <div class="agent">
+        <div class="agent-index">
+          <div class="num">03</div>
+          <div class="name">Health Literacy</div>
+        </div>
+        <div class="agent-body">
+          <h4>Accessibility and reading level</h4>
+          <p>Patient materials should hit 8th grade reading level or below. HCP materials can go higher but still need to avoid unnecessary jargon. This agent scores plain language, terminology choices, and whether the medical concepts are actually accessible to the person reading them.</p>
+          <div class="criteria">
+            <span>Reading level</span>
+            <span>Plain language</span>
+            <span>Medical jargon</span>
+            <span>Concept accessibility</span>
+            <span>Audience calibration</span>
+          </div>
+        </div>
+        <div class="agent-meta">
+          <div class="meta-item">
+            <strong>Hard blocker?</strong>
+            <span>No</span>
+          </div>
+          <div class="meta-item">
+            <strong>Note</strong>
+            <span>Threshold varies by audience: patient vs. HCP assessed differently</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agent 4 -->
+      <div class="agent">
+        <div class="agent-index">
+          <div class="num">04</div>
+          <div class="name">Messaging &amp; Strategy</div>
+        </div>
+        <div class="agent-body">
+          <h4>Strategic clarity and differentiation</h4>
+          <p>Is the core message clear? Does the value proposition land? Does the asset say something specific about the brand, or could it be for any drug in the category? This is the strategic layer: what the asset is saying, not how it looks or whether it gets someone to click.</p>
+          <div class="criteria">
+            <span>Message clarity</span>
+            <span>Value proposition</span>
+            <span>Brand differentiation</span>
+            <span>Single-minded focus</span>
+            <span>Audience relevance</span>
+          </div>
+        </div>
+        <div class="agent-meta">
+          <div class="meta-item">
+            <strong>Hard blocker?</strong>
+            <span>No</span>
+          </div>
+          <div class="meta-item">
+            <strong>Note</strong>
+            <span>Requires campaign objective as context input to score meaningfully</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agent 5 -->
+      <div class="agent">
+        <div class="agent-index">
+          <div class="num">05</div>
+          <div class="name">Engagement</div>
+        </div>
+        <div class="agent-body">
+          <h4>Motivation and behavioral resonance</h4>
+          <p>Does the asset move someone to do something? CTA presence, clarity, urgency. Emotional tone relative to the therapeutic area. A strategically solid asset can still be emotionally flat. This dimension is where that shows up. Informing the audience and motivating them are not the same thing.</p>
+          <div class="criteria">
+            <span>CTA presence</span>
+            <span>CTA clarity</span>
+            <span>Emotional tone</span>
+            <span>Behavioral motivation</span>
+            <span>Urgency</span>
+          </div>
+        </div>
+        <div class="agent-meta">
+          <div class="meta-item">
+            <strong>Hard blocker?</strong>
+            <span>No</span>
+          </div>
+          <div class="meta-item">
+            <strong>Rule trigger</strong>
+            <span>No CTA present = automatic penalty on this dimension</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agent 6 -->
+      <div class="agent">
+        <div class="agent-index">
+          <div class="num">06</div>
+          <div class="name">Visual &amp; Clarity</div>
+        </div>
+        <div class="agent-body">
+          <h4>Craft, hierarchy, and readability</h4>
+          <p>Is there too much copy for the format? Does the eye know where to go first? Is the imagery doing real work or just filling space? Font size, contrast, spacing. A strategically strong asset can still fall apart at this level. That is what the craft review catches.</p>
+          <div class="criteria">
+            <span>Copy volume</span>
+            <span>Visual hierarchy</span>
+            <span>Imagery quality</span>
+            <span>Readability</span>
+            <span>Format appropriateness</span>
+          </div>
+        </div>
+        <div class="agent-meta">
+          <div class="meta-item">
+            <strong>Hard blocker?</strong>
+            <span>No</span>
+          </div>
+          <div class="meta-item">
+            <strong>Rule trigger</strong>
+            <span>Stock-heavy imagery = flag; minimal copy for dense format = flag</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════ SCORING ══════════════ -->
+  <section>
+    <div class="section-label">Scoring System</div>
+    <h2>Score categories &amp; thresholds</h2>
+    <p>Each agent scores 0–100, mapped to four categories. The overall score is a weighted average across all six. Regulatory and Scientific Accuracy are hard blockers. A score below 40 on either flags the overall result no matter how the other four dimensions perform.</p>
+
+    <div class="score-categories">
+      <div class="score-cat poor">
+        <div class="range">0–39</div>
+        <div class="label">Poor</div>
+        <div class="desc">Significant issues requiring immediate attention. If Regulatory or Scientific, a hard block on the asset.</div>
+      </div>
+      <div class="score-cat adequate">
+        <div class="range">40–59</div>
+        <div class="label">Adequate</div>
+        <div class="desc">Meets minimum standards but falls short of best practice. Improvement recommended before deployment.</div>
+      </div>
+      <div class="score-cat good">
+        <div class="range">60–79</div>
+        <div class="label">Good</div>
+        <div class="desc">Above standard. Minor improvements available but asset is deployable as-is.</div>
+      </div>
+      <div class="score-cat strong">
+        <div class="range">80–100</div>
+        <div class="label">Strong</div>
+        <div class="desc">Best-in-class execution. Use as a benchmark reference for this asset type.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ WEIGHTS ══════════════ -->
+  <section>
+    <div class="section-label">Weighting Model</div>
+    <h2>Context-sensitive weights</h2>
+    <p>Weights shift based on format and audience. Regulatory, Scientific Accuracy, and Health Literacy always total at least 55% combined. Those three can't be weighted down no matter what type of asset is being scored. Everything else flexes above that floor.</p>
+
+    <div class="weight-note">
+      ⚠ These weights are proposed starting points. They will require calibration against human expert benchmarks as part of the validation program. The weighting model should be treated as a configurable parameter, not a fixed rule.
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Patient-Facing Print</th>
+          <th>HCP Detail Aid</th>
+          <th>Digital / Banner</th>
+          <th>Rationale</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Regulatory &amp; Compliance</td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:62px"></div><span class="pct">25%</span></div>
+          </td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:50px"></div><span class="pct">20%</span></div>
+          </td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:50px"></div><span class="pct">20%</span></div>
+          </td>
+          <td style="color: var(--muted);">Highest in patient print: ISI requirements strictest here</td>
+        </tr>
+        <tr>
+          <td>Scientific Accuracy</td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:38px"></div><span class="pct">15%</span></div>
+          </td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:62px"></div><span class="pct">25%</span></div>
+          </td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:25px"></div><span class="pct">10%</span></div>
+          </td>
+          <td style="color: var(--muted);">Highest for HCP: clinical credibility is table stakes</td>
+        </tr>
+        <tr>
+          <td>Health Literacy</td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:50px"></div><span class="pct">20%</span></div>
+          </td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:25px"></div><span class="pct">10%</span></div>
+          </td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:38px"></div><span class="pct">15%</span></div>
+          </td>
+          <td style="color: var(--muted);">Critical for patient materials; lower for HCP by design</td>
+        </tr>
+        <tr class="floor-row">
+          <td colspan="4" style="padding-left: 20px;">↑ Pharma-critical floor, combined minimum 55% across all contexts</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Messaging &amp; Strategy</td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:38px"></div><span class="pct">15%</span></div>
+          </td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:50px"></div><span class="pct">20%</span></div>
+          </td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:50px"></div><span class="pct">20%</span></div>
+          </td>
+          <td style="color: var(--muted);">Higher for HCP: message precision matters more in clinical context</td>
+        </tr>
+        <tr>
+          <td>Engagement</td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:25px"></div><span class="pct">10%</span></div>
+          </td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:25px"></div><span class="pct">10%</span></div>
+          </td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:62px"></div><span class="pct">25%</span></div>
+          </td>
+          <td style="color: var(--muted);">Heaviest for digital: CTA and click-through motivation are primary</td>
+        </tr>
+        <tr>
+          <td>Visual &amp; Clarity</td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:38px"></div><span class="pct">15%</span></div>
+          </td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:38px"></div><span class="pct">15%</span></div>
+          </td>
+          <td>
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:25px"></div><span class="pct">10%</span></div>
+          </td>
+          <td style="color: var(--muted);">Consistent across formats; slightly lower for digital where copy is limited</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ══════════════ HARD RULES ══════════════ -->
+  <section>
+    <div class="section-label">Rule Logic</div>
+    <h2>Hard rules &amp; automatic triggers</h2>
+    <p>On top of the dimensional scores, the engine has a set of deterministic rules: specific conditions that trigger automatic penalties. Some things in pharma marketing are just wrong, and a good score on five other dimensions doesn't change that.</p>
+
+    <div class="rules-grid">
+      <div class="rule-card">
+        <h4>No CTA present</h4>
+        <p>No CTA means no intended next action. Automatic penalty on Engagement. The score on that dimension cannot reach Good, regardless of how well everything else reads.</p>
+      </div>
+      <div class="rule-card">
+        <h4>Missing ISI</h4>
+        <p>Patient-facing print and broadcast assets without Important Safety Information get a Regulatory hard block. The dimension floors at Poor and the overall result is flagged. Full stop.</p>
+      </div>
+      <div class="rule-card">
+        <h4>Stock-heavy imagery</h4>
+        <p>Heavy reliance on generic stock photography gets flagged on Visual & Clarity. Not a hard fail, but the maximum achievable score on that dimension drops to Adequate.</p>
+      </div>
+      <div class="rule-card">
+        <h4>Minimal copy in dense formats</h4>
+        <p>Detail aids or print ads that make claims without enough copy to support them get flagged on both Messaging and Scientific Accuracy. If you can't back it up in the asset, it's a substantiation gap.</p>
+      </div>
+      <div class="rule-card">
+        <h4>High engagement + poor regulatory</h4>
+        <p>A cross-agent check: if Engagement scores 70 or above while Regulatory is below 40, a warning fires. A compelling asset with compliance failures is more dangerous than a weak one. It is more likely to reach someone.</p>
+      </div>
+      <div class="rule-card">
+        <h4>Reading level mismatch</h4>
+        <p>Patient-facing assets that score above 8th grade reading level get flagged. Not a hard block, but it comes up first in the priority fixes: it is the kind of thing that gets missed in review and then matters a lot in the real world.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ INPUTS ══════════════ -->
+  <section>
+    <div class="section-label">Inputs</div>
+    <h2>What the engine needs to score</h2>
+    <p>The engine takes three inputs alongside the asset. Without them, scoring gets less accurate and some dimensions can't run properly. The agents need context to know what they're judging against.</p>
+
+    <div class="inputs-row">
+      <div class="input-card">
+        <div class="icon">🎯</div>
+        <h4>Therapeutic area</h4>
+        <p>The disease state or treatment category. Regulatory expectations, acceptable claims language, and literacy assumptions all change depending on this. The Regulatory and Scientific agents need it to run.</p>
+      </div>
+      <div class="input-card">
+        <div class="icon">👤</div>
+        <h4>Target audience</h4>
+        <p>Patient, HCP, caregiver, payer. This determines which weight profile applies and sets the reading level and tone expectations. Health Literacy and Engagement both need it to score correctly.</p>
+      </div>
+      <div class="input-card">
+        <div class="icon">📋</div>
+        <h4>Campaign objective</h4>
+        <p>Awareness, conversion, education, adherence: what is this asset actually supposed to do? The Messaging & Strategy agent needs this to tell whether the asset was built for the right goal in the first place.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ OUTPUTS ══════════════ -->
+  <section>
+    <div class="section-label">Outputs</div>
+    <h2>What the engine produces</h2>
+
+    <div class="outputs-list">
+      <div class="output-row">
+        <div class="output-label">Overall score (0–100)</div>
+        <div class="output-desc">Weighted average across all six dimensions, mapped to Poor / Adequate / Good / Strong. The headline result.</div>
+      </div>
+      <div class="output-row">
+        <div class="output-label">Dimension scores × 6</div>
+        <div class="output-desc">Individual 0–100 score for each agent with category label. Shows where the asset is strong and where it fails.</div>
+      </div>
+      <div class="output-row">
+        <div class="output-label">Evidence quotes</div>
+        <div class="output-desc">Each agent returns a direct quote or element from the asset that most influenced its score. Grounds the score in the actual material.</div>
+      </div>
+      <div class="output-row">
+        <div class="output-label">Priority fixes</div>
+        <div class="output-desc">Top 5 recommendations ranked by severity. Lowest-scoring dimension issues surface first. Specific and actionable, not generic.</div>
+      </div>
+      <div class="output-row">
+        <div class="output-label">Inline annotations</div>
+        <div class="output-desc">Flagged elements tagged as error, warning, or strength, tied to the dimension that identified them. Enables visual overlay on the asset itself.</div>
+      </div>
+      <div class="output-row">
+        <div class="output-label">Consistency warnings</div>
+        <div class="output-desc">Cross-agent contradictions surfaced separately (e.g. high engagement with poor regulatory compliance). Alerts the reviewer to systemic issues.</div>
+      </div>
+      <div class="output-row">
+        <div class="output-label">Hard block flags</div>
+        <div class="output-desc">Explicit alert if Regulatory or Scientific Accuracy fall below 40. Overrides overall score display. The asset cannot be considered passable regardless of other dimensions.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ VALIDATION ══════════════ -->
+  <section>
+    <div class="section-label">Validation Program</div>
+    <h2>How this definition gets tested</h2>
+    <p>The definition above is a proposed standard. Before the engine can be used with any real confidence, it has to be validated across five dimensions. The full test matrix is in the separate Validation Plan. These are the questions each dimension is trying to answer:</p>
+
+    <div class="validation-grid">
+      <div class="val-card">
+        <div class="val-label">Precision</div>
+        <div class="val-q">Is the tool consistent when run repeatedly?</div>
+        <div class="val-tests">Score variance · Pass consistency · Dimension stability</div>
+      </div>
+      <div class="val-card">
+        <div class="val-label">Accuracy</div>
+        <div class="val-q">Does it agree with human expert judgment?</div>
+        <div class="val-tests">Expert agreement · Category alignment · Dimension accuracy · Recommendation match</div>
+      </div>
+      <div class="val-card">
+        <div class="val-label">Range</div>
+        <div class="val-q">Does it use the full scale without clustering?</div>
+        <div class="val-tests">Benchmark ladder · Forced contrast · Score distribution · Rank ordering</div>
+      </div>
+      <div class="val-card">
+        <div class="val-label">Robustness</div>
+        <div class="val-q">Does it hold up under minor irrelevant changes?</div>
+        <div class="val-tests">Format variation · Metadata variation · Noise injection · Edge cases · Uptime</div>
+      </div>
+      <div class="val-card">
+        <div class="val-label">Specificity</div>
+        <div class="val-q">Does it correctly identify what's wrong and why?</div>
+        <div class="val-tests">Single-factor manipulation · Rule triggers · Recommendation relevance · False positive/negative</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ══════════════ HEDGEHOX FEEDBACK ══════════════ -->
+<div style="background: #0E0E0E; padding: 72px 80px;">
+  <div style="max-width: 1060px; margin: 0 auto;">
+    <div style="font-family: Arial, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #C84B31; margin-bottom: 28px;">Hedgehox Feedback</div>
+    <h2 style="font-size: 32px; font-weight: 400; letter-spacing: -0.02em; color: white; margin-bottom: 32px; line-height: 1.2;">On the benchmark question:<br>don't collect. Let teams contribute.</h2>
+
+    <p style="font-family: Georgia, serif; font-size: 16px; color: #A09D97; max-width: 720px; line-height: 1.75; margin-bottom: 48px;">The current validation plan requires 500–1,000 assets before the engine can be properly tested. That's a lot of work before beta even starts, and it assumes someone centrally has the time and therapeutic-area expertise to curate assets across every format and indication. We don't think that's the right starting point.</p>
+
+    <div style="border-top: 1px solid #333; border-bottom: 1px solid #333; padding: 48px 0; margin-bottom: 48px;">
+      <p style="font-family: Georgia, serif; font-size: 28px; font-weight: 400; color: white; line-height: 1.35; max-width: 780px; margin: 0; letter-spacing: -0.01em;">Skip the collection phase entirely.<br><span style="color: #C84B31;">Let the beta program build the benchmark.</span></p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; margin: 40px 0;">
+      <div style="background: #1A1A1A; padding: 32px;">
+        <div style="font-family: Arial, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #C84B31; margin-bottom: 14px;">The idea</div>
+        <p style="font-family: Arial, sans-serif; font-size: 13px; color: #999; line-height: 1.6; margin: 0;">Each team in the beta gets an upload portal for their own final-approved assets. Work that's already cleared medical, legal, regulatory, and client review becomes the benchmark (not a curated dataset, but The Bloc's own proven output).</p>
+      </div>
+      <div style="background: #1A1A1A; padding: 32px;">
+        <div style="font-family: Arial, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #C84B31; margin-bottom: 14px;">Why it's a better signal</div>
+        <p style="font-family: Arial, sans-serif; font-size: 13px; color: #999; line-height: 1.6; margin: 0;">Final-approved assets have already passed every review gate. That is a stronger quality signal than asking a few experts to score something on demand. A cardiovascular team's approved work is the right benchmark for cardiovascular work. It's specific in a way a generic pharma standard can't be.</p>
+      </div>
+      <div style="background: #1A1A1A; padding: 32px;">
+        <div style="font-family: Arial, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #C84B31; margin-bottom: 14px;">It gets better as you use it</div>
+        <p style="font-family: Arial, sans-serif; font-size: 13px; color: #999; line-height: 1.6; margin: 0;">Every upload makes the benchmark richer. The engine is useful from day one with a small corpus and improves as teams keep uploading. The agency ends up building institutional knowledge as a side effect of using the tool, not as a prerequisite for it.</p>
+      </div>
+    </div>
+
+    <div style="border-left: 3px solid #C84B31; padding: 24px 28px; background: #141414; max-width: 720px;">
+      <p style="font-family: Arial, sans-serif; font-size: 13px; color: #CCC; line-height: 1.7; margin: 0;">The scoring model becomes three layers instead of two: the 6 agents do dimensional analysis, a knowledge base retrieval layer pulls the most relevant approved assets as comparators, and the output shows both an absolute score and a score relative to comparable approved work from the same team. The 500–1,000 asset requirement stops being a hard prerequisite and becomes something the beta program builds naturally.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="logo">Hedgehox</div>
+  <div>Prepared for The Bloc · April 2026 · Confidential</div>
+</footer>
+
+</body>
+</html>
