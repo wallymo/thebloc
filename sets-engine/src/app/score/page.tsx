@@ -81,7 +81,7 @@ export default function ScorePage() {
       {/* ── HEADER ── */}
       <header style={{ background: '#0E0E0E', color: 'white', padding: '48px 64px 40px' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <p className="eyebrow" style={{ marginBottom: 16 }}>The Bloc · PowerBe-Comms</p>
+          <p className="eyebrow" style={{ marginBottom: 16 }}>The Bloc</p>
           <h1 style={{ fontSize: 44, fontWeight: 400, lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: 14 }}>
             Score Your <span style={{ color: '#C84B31' }}>Asset</span>
           </h1>
