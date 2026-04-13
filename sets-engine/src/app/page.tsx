@@ -17,64 +17,29 @@ export default function Home() {
   return (
     <main className="min-h-screen" style={{ background: '#F5F4F0' }}>
 
-      {/* ── HEADER ── */}
-      <header style={{ background: '#0E0E0E', color: 'white', padding: '48px 64px 40px' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <p className="eyebrow" style={{ marginBottom: 16 }}>The Bloc</p>
-          <h1 style={{ fontSize: 44, fontWeight: 400, lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: 14 }}>
-            SETS <span style={{ color: '#C84B31' }}>Engine</span>
-          </h1>
-          <p style={{ fontFamily: 'Arial, sans-serif', fontSize: 15, color: '#A09D97', maxWidth: 520, lineHeight: 1.6, marginBottom: 0 }}>
-            AI-powered scoring for pharma &amp; healthcare marketing assets — evaluating Science, Engagement, Targeting &amp; Simplicity.
-          </p>
-
-          <div style={{
-            marginTop: 36,
-            display: 'flex',
-            gap: 48,
-            fontFamily: 'Arial, sans-serif',
-            fontSize: 12,
-            color: '#666',
-            letterSpacing: '0.06em',
-            borderTop: '1px solid #222',
-            paddingTop: 24,
-            alignItems: 'flex-start',
-            flexWrap: 'wrap',
-          }}>
-            <div>
-              <strong style={{ display: 'block', color: '#999', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 4 }}>Pillar</strong>
-              PowerBe-Comms
-            </div>
-            <div>
-              <strong style={{ display: 'block', color: '#999', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 4 }}>Dimensions</strong>
-              Science · Engagement · Targeting · Simplicity
-            </div>
-            <div>
-              <strong style={{ display: 'block', color: '#999', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 4 }}>Version</strong>
-              Validation Preview
-            </div>
-            <div style={{ marginLeft: 'auto' }}>
-              <Link href="/score">
-                <button style={{
-                  background: '#C84B31',
-                  color: 'white',
-                  fontFamily: 'Arial, sans-serif',
-                  fontSize: 13,
-                  fontWeight: 700,
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  padding: '12px 28px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'opacity 0.15s',
-                }}>
-                  Score Your Asset →
-                </button>
-              </Link>
-            </div>
-          </div>
+      {/* ── TOP BAR ── */}
+      <div style={{ background: '#0E0E0E', padding: '14px 64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <span style={{ fontFamily: 'Arial, sans-serif', fontSize: 13, fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.06em' }}>SETS Engine</span>
+          <span style={{ fontFamily: 'Arial, sans-serif', fontSize: 11, color: '#666', letterSpacing: '0.04em' }}>by The Bloc</span>
         </div>
-      </header>
+        <Link href="/score">
+          <button style={{
+            background: '#C84B31',
+            color: 'white',
+            fontFamily: 'Arial, sans-serif',
+            fontSize: 11,
+            fontWeight: 700,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            padding: '8px 20px',
+            border: 'none',
+            cursor: 'pointer',
+          }}>
+            Score Your Asset →
+          </button>
+        </Link>
+      </div>
 
       {/* ── SAMPLE SELECTOR ── */}
       <div style={{ borderBottom: '1px solid #D6D3CB', background: '#FFFFFF' }}>
