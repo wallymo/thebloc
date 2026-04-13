@@ -82,7 +82,6 @@ export default function ScorePage() {
       <div style={{ background: '#0E0E0E', padding: '14px 64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <span style={{ fontFamily: 'Arial, sans-serif', fontSize: 13, fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.06em' }}>SETS Engine</span>
-          <span style={{ fontFamily: 'Arial, sans-serif', fontSize: 11, color: '#666', letterSpacing: '0.04em' }}>by The Bloc</span>
         </div>
         <Link href="/">
           <button style={{
@@ -279,21 +278,6 @@ export default function ScorePage() {
         </div>
       </div>
 
-      {/* ── FOOTER ── */}
-      <footer style={{
-        borderTop: '1px solid #D6D3CB',
-        padding: '24px 64px',
-        fontFamily: 'Arial, sans-serif',
-        fontSize: 11,
-        color: '#7A7670',
-        letterSpacing: '0.06em',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}>
-        <span>© 2026 The Bloc · An IPG / IW Company</span>
-        <span style={{ color: '#C84B31', fontWeight: 700 }}>SETS ENGINE — VALIDATION PREVIEW</span>
-      </footer>
 
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
